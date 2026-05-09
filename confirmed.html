@@ -29,7 +29,7 @@
         }
 
         .page {
-            max-width: 560px;
+            max-width: 760px;
             margin: 0 auto;
             padding: 4rem 1.5rem 6rem;
         }
@@ -53,16 +53,20 @@
         }
 
         .subtitle {
-            font-size: 0.95rem;
+            font-size: 2rem;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--muted);
+            letter-spacing: 0.05em;
+            color: var(--text-dark);
+            line-height: 1.15;
             margin: 0 0 2.5rem;
         }
 
         .message {
-            font-size: 1.2rem;
-            line-height: 1.5;
+            font-size: 1.05rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            line-height: 1.6;
             margin: 0 0 2.5rem;
         }
 
@@ -75,18 +79,24 @@
             display: block;
             font-size: 0.85rem;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.05em;
             color: var(--muted);
             margin-bottom: 1rem;
         }
 
+        .cal-row {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
         .cal-btn {
-            display: block;
+            flex: 1 1 240px;
             font-family: inherit;
             font-size: 0.95rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.04em;
             text-align: center;
             text-decoration: none;
             padding: 0.85rem 1.5rem;
@@ -94,7 +104,6 @@
             color: var(--bg-color);
             border: 1.5px solid var(--text-dark);
             border-radius: 4px;
-            margin-bottom: 0.75rem;
             transition: opacity 0.15s;
         }
 
@@ -106,15 +115,42 @@
         }
 
         .venue {
+            display: block;
             font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             color: var(--muted);
-            margin-top: 1.25rem;
-            line-height: 1.55;
+            text-decoration: none;
+            margin-top: 1.5rem;
+            line-height: 1.7;
+            transition: opacity 0.15s;
         }
+        .venue:hover { opacity: 0.7; }
         .venue strong {
             color: #1a1a1a;
             font-weight: 600;
         }
+
+        .more-details {
+            font-family: 'Cedarville Cursive', cursive;
+            font-size: 1.4rem;
+            color: var(--text-dark);
+            margin: 1.5rem 0 0;
+        }
+
+        .edit-link {
+            margin-top: 3.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        .edit-link a {
+            color: var(--muted);
+            text-decoration: underline;
+            text-decoration-color: var(--outline-color);
+            text-underline-offset: 0.3em;
+            transition: color 0.15s;
+        }
+        .edit-link a:hover { color: var(--text-dark); }
 
         .hidden { display: none !important; }
     </style>
@@ -124,22 +160,31 @@
     <div class="page">
         <a class="home-link" href="/">← back</a>
 
-        <h1>thank you</h1>
         <p class="subtitle">November 21, 2026 · Dallas, TX</p>
 
-        <p class="message" id="attending-msg">Thank you! See you on November 21st.</p>
+        <p class="message" id="attending-msg">Thank you! Can't wait to see you there.</p>
         <p class="message hidden" id="not-attending-msg">Got it — thanks for letting us know.</p>
 
         <section class="cal-section hidden" id="cal-section">
             <span class="cal-label">Add to your calendar</span>
-            <a class="cal-btn" href="wedding.ics" download="farbeen-tommy-wedding.ics">Apple Calendar / Outlook</a>
-            <a class="cal-btn ghost"
-               href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Farbeen+%26+Tommy%27s+Wedding&dates=20261121/20261122&location=Astoria+Event+Venue%2C+3216+Royalty+Row%2C+Irving%2C+TX+75062&details=More+details+to+come+at+https%3A%2F%2Fnov21.party"
-               target="_blank" rel="noopener">Google Calendar</a>
-            <p class="venue"><strong>Astoria Event Venue</strong><br>3216 Royalty Row, Irving, TX 75062</p>
+            <div class="cal-row">
+                <a class="cal-btn" href="wedding.ics" download="farbeen-tommy-wedding.ics">Apple Calendar / Outlook</a>
+                <a class="cal-btn ghost"
+                   href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Farbeen+%26+Tommy%27s+Wedding&dates=20261121/20261122&location=Astoria+Event+Venue%2C+3216+Royalty+Row%2C+Irving%2C+TX+75062&details=More+details+to+come+at+https%3A%2F%2Fnov21.party"
+                   target="_blank" rel="noopener">Google Calendar</a>
+            </div>
+            <a class="venue"
+               href="https://www.google.com/maps/search/?api=1&query=Astoria+Event+Venue+3216+Royalty+Row+Irving+TX+75062"
+               target="_blank" rel="noopener">
+                <strong>Astoria Event Venue</strong><br>3216 Royalty Row, Irving, TX 75062
+            </a>
+            <p class="more-details">more details soon...</p>
         </section>
+
+        <p class="edit-link"><a href="rsvp.html">Made a mistake? Update your rsvp.</a></p>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <script>
         const attending = new URLSearchParams(window.location.search).get('attending');
         if (attending === 'no') {
@@ -147,6 +192,19 @@
             document.getElementById('not-attending-msg').classList.remove('hidden');
         } else {
             document.getElementById('cal-section').classList.remove('hidden');
+            // Subtle ruby/cream confetti burst on arrival.
+            window.addEventListener('load', () => {
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 50,
+                        spread: 65,
+                        origin: { y: 0.4 },
+                        colors: ['#9b111e', '#bebaa9', '#d4c4b0'],
+                        scalar: 0.9,
+                        ticks: 220,
+                    });
+                }
+            });
         }
     </script>
 </body>
