@@ -1,0 +1,7 @@
+.env
+scripts/*.csv
+!scripts/*.csv.example
+scripts/sent.log
+__pycache__/
+.venv/
+*.pyc

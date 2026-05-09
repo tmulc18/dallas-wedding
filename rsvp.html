@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSVP — Farbeen & Tommy</title>
+    <link rel="icon" href="apple-touch-icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
+
+        :root {
+            --bg-color: #f0ece3;
+            --text-dark: #9b111e;
+            --outline-color: #bebaa9;
+            --espresso-color: #d4c4b0;
+            --muted: #6b5e54;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        .page {
+            max-width: 560px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem 6rem;
+        }
+
+        .home-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-family: 'Cedarville Cursive', cursive;
+            font-size: 1.4rem;
+        }
+
+        h1 {
+            font-family: 'Cedarville Cursive', cursive;
+            color: var(--text-dark);
+            font-weight: normal;
+            font-size: 4rem;
+            margin: 0 0 0.25rem;
+            line-height: 1;
+        }
+
+        .subtitle {
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin: 0 0 2.5rem;
+        }
+
+        label {
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="tel"], input[type="text"] {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0.9rem 1rem;
+            font-size: 1.05rem;
+            font-family: inherit;
+            background: transparent;
+            border: 1.5px solid var(--outline-color);
+            border-radius: 4px;
+            color: #1a1a1a;
+            transition: border-color 0.15s;
+        }
+
+        input[type="tel"]:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: var(--text-dark);
+        }
+
+        button {
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 0.9rem 1.5rem;
+            background: var(--text-dark);
+            color: var(--bg-color);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity 0.15s;
+        }
+
+        button:hover:not(:disabled) { opacity: 0.85; }
+        button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        button.ghost {
+            background: transparent;
+            color: var(--text-dark);
+            border: 1.5px solid var(--text-dark);
+        }
+
+        .submit-row {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .submit-row button { flex: 1; }
+
+        .message {
+            margin-top: 1rem;
+            min-height: 1.4em;
+            font-size: 0.95rem;
+        }
+        .message.error   { color: var(--text-dark); }
+        .message.success { color: #2d6a3e; }
+
+        .hidden { display: none !important; }
+
+        /* Response view */
+        .guest-row {
+            border-top: 1px solid var(--outline-color);
+            padding: 1.25rem 0;
+        }
+        .guest-row:last-of-type { border-bottom: 1px solid var(--outline-color); }
+
+        .guest-name {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        .guest-name input {
+            font-size: 1.05rem;
+            font-weight: 400;
+        }
+
+        .yes-no {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .yes-no label {
+            flex: 1;
+            margin: 0;
+            padding: 0.7rem 1rem;
+            text-align: center;
+            border: 1.5px solid var(--outline-color);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s;
+            letter-spacing: 1.5px;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+        .yes-no input { position: absolute; opacity: 0; pointer-events: none; }
+        .yes-no input:checked + label {
+            background: var(--text-dark);
+            color: var(--bg-color);
+            border-color: var(--text-dark);
+        }
+
+        .add-another {
+            margin-top: 1.25rem;
+            background: transparent;
+            color: var(--text-dark);
+            border: 1.5px dashed var(--outline-color);
+            width: 100%;
+            padding: 0.85rem;
+        }
+        .add-another:hover:not(:disabled) {
+            border-color: var(--text-dark);
+            background: rgba(155, 17, 30, 0.05);
+            opacity: 1;
+        }
+
+        .lookup-name {
+            font-size: 1rem;
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
+        .lookup-name strong { color: var(--text-dark); font-weight: 600; }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <a class="home-link" href="/">← back</a>
+
+        <h1>rsvp</h1>
+        <p class="subtitle">November 21, 2026 · Dallas, TX</p>
+
+        <!-- ===== Lookup view ===== -->
+        <section id="lookup-view">
+            <form id="lookup-form" novalidate>
+                <label for="phone">Your phone number</label>
+                <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(214) 555-0123" required>
+                <div class="submit-row">
+                    <button type="submit" id="lookup-btn">Look me up</button>
+                </div>
+            </form>
+            <p id="lookup-message" class="message" role="status"></p>
+        </section>
+
+        <!-- ===== Response view ===== -->
+        <section id="response-view" class="hidden">
+            <p class="lookup-name">Found you. Up to <strong><span id="cap-display"></span></strong> guest<span id="cap-plural">s</span> on this invitation.</p>
+            <form id="response-form" novalidate>
+                <div id="rows"></div>
+                <button type="button" id="add-row" class="add-another hidden">+ add another family member</button>
+                <div class="submit-row">
+                    <button type="button" id="back-btn" class="ghost">Back</button>
+                    <button type="submit" id="submit-btn">Submit RSVP</button>
+                </div>
+            </form>
+            <p id="response-message" class="message" role="status"></p>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ===== Supabase config (anon key is public by design; RLS does the work) =====
+        const SUPABASE_URL = 'https://jjocwguujpauqkxllkoa.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_EhnBBWvy1m762EXv0HBuAg_vY6YNZdn';
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ===== Phone normalization (mirror of scripts/_phone.py) =====
+        function normalizePhone(raw) {
+            const digits = (raw || '').trim().replace(/[\s\-().]/g, '');
+            if (digits.startsWith('+')) {
+                const rest = digits.slice(1);
+                return /^\d{10,}$/.test(rest) ? digits : null;
+            }
+            if (!/^\d+$/.test(digits)) return null;
+            if (digits.length === 10) return '+1' + digits;
+            if (digits.length === 11 && digits.startsWith('1')) return '+' + digits;
+            return null;
+        }
+
+        // ===== State =====
+        let currentPhone = null;
+        let currentCap = 1;
+        let knownGuests = [];
+
+        // ===== DOM =====
+        const lookupView = document.getElementById('lookup-view');
+        const responseView = document.getElementById('response-view');
+        const phoneInput = document.getElementById('phone');
+        const lookupBtn = document.getElementById('lookup-btn');
+        const lookupMsg = document.getElementById('lookup-message');
+        const submitBtn = document.getElementById('submit-btn');
+        const respMsg = document.getElementById('response-message');
+        const rowsEl = document.getElementById('rows');
+        const addRowBtn = document.getElementById('add-row');
+
+        function setMessage(el, text, kind) {
+            el.textContent = text;
+            el.className = 'message' + (kind ? ' ' + kind : '');
+        }
+
+        function rowTemplate({ name, editable }) {
+            const row = document.createElement('div');
+            row.className = 'guest-row';
+            const nameId = 'name-' + Math.random().toString(36).slice(2, 8);
+            const groupId = 'att-' + Math.random().toString(36).slice(2, 8);
+
+            const nameHtml = editable
+                ? `<input type="text" placeholder="Guest name" autocomplete="name" required>`
+                : `${escapeHtml(name)}`;
+
+            row.innerHTML = `
+                <div class="guest-name">${nameHtml}</div>
+                <div class="yes-no">
+                    <input type="radio" id="${groupId}-y" name="${groupId}" value="yes">
+                    <label for="${groupId}-y">Attending</label>
+                    <input type="radio" id="${groupId}-n" name="${groupId}" value="no">
+                    <label for="${groupId}-n">Can't make it</label>
+                </div>
+            `;
+            row.dataset.editable = editable ? '1' : '0';
+            return row;
+        }
+
+        function escapeHtml(s) {
+            return String(s).replace(/[&<>"']/g, c => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[c]));
+        }
+
+        function renderResponseView() {
+            rowsEl.innerHTML = '';
+            document.getElementById('cap-display').textContent = currentCap;
+            document.getElementById('cap-plural').textContent = currentCap === 1 ? '' : 's';
+
+            if (knownGuests.length > 0) {
+                knownGuests.forEach(name => rowsEl.appendChild(rowTemplate({ name, editable: false })));
+                addRowBtn.classList.add('hidden');
+            } else {
+                rowsEl.appendChild(rowTemplate({ name: '', editable: true }));
+                updateAddButton();
+            }
+            lookupView.classList.add('hidden');
+            responseView.classList.remove('hidden');
+            setMessage(respMsg, '', '');
+        }
+
+        function updateAddButton() {
+            const count = rowsEl.children.length;
+            if (knownGuests.length === 0 && count < currentCap) {
+                addRowBtn.classList.remove('hidden');
+            } else {
+                addRowBtn.classList.add('hidden');
+            }
+        }
+
+        addRowBtn.addEventListener('click', () => {
+            if (rowsEl.children.length >= currentCap) return;
+            rowsEl.appendChild(rowTemplate({ name: '', editable: true }));
+            updateAddButton();
+        });
+
+        document.getElementById('back-btn').addEventListener('click', () => {
+            responseView.classList.add('hidden');
+            lookupView.classList.remove('hidden');
+            setMessage(lookupMsg, '', '');
+        });
+
+        // ===== Lookup =====
+        document.getElementById('lookup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const phone = normalizePhone(phoneInput.value);
+            if (!phone) {
+                setMessage(lookupMsg, "That doesn't look like a valid phone number. Try with area code.", 'error');
+                return;
+            }
+            lookupBtn.disabled = true;
+            setMessage(lookupMsg, 'Looking…', '');
+
+            const { data, error } = await sb.rpc('lookup_guest', { p_phone: phone });
+            lookupBtn.disabled = false;
+
+            if (error) {
+                setMessage(lookupMsg, "Something went wrong. Please try again in a moment.", 'error');
+                console.error(error);
+                return;
+            }
+            if (!data || data.length === 0) {
+                setMessage(lookupMsg, "Sorry, couldn't find you. Please try again. Try your spouse's number if you are having issues.", 'error');
+                return;
+            }
+
+            const row = data[0];
+            currentPhone = row.phone;
+            currentCap = row.num_allowed;
+            knownGuests = row.guests || [];
+            renderResponseView();
+        });
+
+        // ===== Submit RSVP =====
+        document.getElementById('response-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const responses = [];
+            for (const row of rowsEl.children) {
+                const editable = row.dataset.editable === '1';
+                const name = editable
+                    ? row.querySelector('input[type="text"]').value.trim()
+                    : row.querySelector('.guest-name').textContent.trim();
+                const checked = row.querySelector('input[type="radio"]:checked');
+
+                if (editable && !name) {
+                    setMessage(respMsg, 'Please enter a name for each guest.', 'error');
+                    return;
+                }
+                if (!checked) {
+                    setMessage(respMsg, `Please choose attending or not for ${name || 'each guest'}.`, 'error');
+                    return;
+                }
+                responses.push({ name, attending: checked.value === 'yes' });
+            }
+
+            submitBtn.disabled = true;
+            setMessage(respMsg, 'Sending…', '');
+
+            const { error } = await sb.rpc('submit_rsvp', {
+                p_phone: currentPhone,
+                p_responses: responses,
+            });
+
+            if (error) {
+                submitBtn.disabled = false;
+                setMessage(respMsg, "Couldn't save your RSVP. Please try again.", 'error');
+                console.error(error);
+                return;
+            }
+
+            const anyYes = responses.some(r => r.attending);
+            setMessage(
+                respMsg,
+                anyYes ? "Thanks! We'll see you on November 21." : "Got it — thanks for letting us know.",
+                'success'
+            );
+            // Lock the form after success
+            for (const el of document.querySelectorAll('#response-form input, #response-form button:not(#back-btn)')) {
+                el.disabled = true;
+            }
+        });
+    </script>
+</body>
+
+</html>
