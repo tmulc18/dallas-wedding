@@ -297,7 +297,7 @@
     <div class="content-layer">
         <h1 class="fg-text" id="section-date">NOVEMBER 21 2026</h1>
         <h1 class="fg-text location" id="section-location">DALLAS,  TX</h1>
-        <a class="rsvp-link" href="rsvp.html">rsvp</a>
+        <a class="rsvp-link" id="section-rsvp" href="rsvp.html">rsvp</a>
     </div>
 
     <!-- COMMENTED OUT: Transition section and details - showing only save the date for now -->
@@ -375,7 +375,7 @@
 
         const autoScrollSections = [
             { trigger: "#section-date", target: "#section-location", duration: 1, offsetY: 0.3 },
-            { trigger: "#section-location", target: "#section-save", duration: 1, offsetY: 0.3 }
+            { trigger: "#section-location", target: "#section-rsvp", duration: 1, offsetY: 0.3 }
             // Removed scroll to coffee-section - stops at save the date
         ];
 
