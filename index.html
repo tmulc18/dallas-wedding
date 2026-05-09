@@ -92,24 +92,20 @@
             letter-spacing: -0.01em;
         }
 
-        .save-block {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2vh;
-        }
-
         .rsvp-link {
+            display: block;
             font-family: 'Cedarville Cursive', cursive;
-            font-size: 4vw;
+            font-size: 16vw;
             color: var(--text-dark);
             text-decoration: none;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.02em;
+            text-align: center;
+            line-height: 1;
         }
-        .rsvp-link:hover { opacity: 0.7; }
+        .rsvp-link:hover { opacity: 0.75; }
 
         @media (max-width: 768px) {
-            .rsvp-link { font-size: 7vw; }
+            .rsvp-link { font-size: 26vw; }
         }
 
         /* --- NEW: COFFEE RAVE SECTION --- */
@@ -301,10 +297,7 @@
     <div class="content-layer">
         <h1 class="fg-text" id="section-date">NOVEMBER 21 2026</h1>
         <h1 class="fg-text location" id="section-location">DALLAS,  TX</h1>
-        <div class="save-block">
-            <h1 class="fg-text" id="section-save">SAVE THE DATE</h1>
-            <a class="rsvp-link" href="rsvp.html">rsvp →</a>
-        </div>
+        <a class="rsvp-link" href="rsvp.html">rsvp</a>
     </div>
 
     <!-- COMMENTED OUT: Transition section and details - showing only save the date for now -->
