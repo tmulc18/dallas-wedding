@@ -181,13 +181,6 @@
             opacity: 1;
         }
 
-        .lookup-name {
-            font-size: 1.15rem;
-            font-style: italic;
-            color: var(--muted);
-            margin-bottom: 1.5rem;
-        }
-        .lookup-name strong { color: var(--text-dark); font-weight: 600; font-style: normal; }
     </style>
 </head>
 
@@ -212,7 +205,6 @@
 
         <!-- ===== Response view ===== -->
         <section id="response-view" class="hidden">
-            <p class="lookup-name">Found you. Up to <strong><span id="cap-display"></span></strong> guest<span id="cap-plural">s</span> on this invitation.</p>
             <form id="response-form" novalidate>
                 <div id="rows"></div>
                 <button type="button" id="add-row" class="add-another hidden">+ add another family member</button>
@@ -297,8 +289,6 @@
 
         function renderResponseView() {
             rowsEl.innerHTML = '';
-            document.getElementById('cap-display').textContent = currentCap;
-            document.getElementById('cap-plural').textContent = currentCap === 1 ? '' : 's';
 
             if (knownGuests.length > 0) {
                 knownGuests.forEach(name => rowsEl.appendChild(rowTemplate({ name, editable: false })));
