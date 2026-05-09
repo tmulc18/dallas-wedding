@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSVP confirmed — Farbeen & Tommy</title>
+    <link rel="icon" href="apple-touch-icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
+
+        :root {
+            --bg-color: #f0ece3;
+            --text-dark: #9b111e;
+            --outline-color: #bebaa9;
+            --muted: #6b5e54;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        .page {
+            max-width: 560px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem 6rem;
+        }
+
+        .home-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-family: 'Cedarville Cursive', cursive;
+            font-size: 1.4rem;
+        }
+
+        h1 {
+            font-family: 'Cedarville Cursive', cursive;
+            color: var(--text-dark);
+            font-weight: normal;
+            font-size: 4rem;
+            margin: 0 0 0.25rem;
+            line-height: 1;
+        }
+
+        .subtitle {
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin: 0 0 2.5rem;
+        }
+
+        .message {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            margin: 0 0 2.5rem;
+        }
+
+        .cal-section {
+            border-top: 1px solid var(--outline-color);
+            padding-top: 2rem;
+        }
+
+        .cal-label {
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-bottom: 1rem;
+        }
+
+        .cal-btn {
+            display: block;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+            text-decoration: none;
+            padding: 0.9rem 1.5rem;
+            background: var(--text-dark);
+            color: var(--bg-color);
+            border: 1.5px solid var(--text-dark);
+            border-radius: 4px;
+            margin-bottom: 0.75rem;
+            transition: opacity 0.15s;
+        }
+
+        .cal-btn:hover { opacity: 0.85; }
+
+        .cal-btn.ghost {
+            background: transparent;
+            color: var(--text-dark);
+        }
+
+        .venue {
+            font-size: 0.95rem;
+            color: var(--muted);
+            margin-top: 1.25rem;
+            line-height: 1.55;
+        }
+        .venue strong {
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <a class="home-link" href="/">← back</a>
+
+        <h1>thank you</h1>
+        <p class="subtitle">November 21, 2026 · Dallas, TX</p>
+
+        <p class="message" id="attending-msg">Thank you! See you on November 21st.</p>
+        <p class="message hidden" id="not-attending-msg">Got it — thanks for letting us know.</p>
+
+        <section class="cal-section hidden" id="cal-section">
+            <span class="cal-label">Add to your calendar</span>
+            <a class="cal-btn" href="wedding.ics" download="farbeen-tommy-wedding.ics">Apple Calendar / Outlook</a>
+            <a class="cal-btn ghost"
+               href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Farbeen+%26+Tommy%27s+Wedding&dates=20261121/20261122&location=Astoria+Event+Venue%2C+3216+Royalty+Row%2C+Irving%2C+TX+75062&details=More+details+to+come+at+https%3A%2F%2Fnov21.party"
+               target="_blank" rel="noopener">Google Calendar</a>
+            <p class="venue"><strong>Astoria Event Venue</strong><br>3216 Royalty Row, Irving, TX 75062</p>
+        </section>
+    </div>
+
+    <script>
+        const attending = new URLSearchParams(window.location.search).get('attending');
+        if (attending === 'no') {
+            document.getElementById('attending-msg').classList.add('hidden');
+            document.getElementById('not-attending-msg').classList.remove('hidden');
+        } else {
+            document.getElementById('cal-section').classList.remove('hidden');
+        }
+    </script>
+</body>
+
+</html>

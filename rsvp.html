@@ -405,15 +405,7 @@
             }
 
             const anyYes = responses.some(r => r.attending);
-            setMessage(
-                respMsg,
-                anyYes ? "Thanks! We'll see you on November 21." : "Got it — thanks for letting us know.",
-                'success'
-            );
-            // Lock the form after success
-            for (const el of document.querySelectorAll('#response-form input, #response-form button:not(#back-btn)')) {
-                el.disabled = true;
-            }
+            window.location.href = `confirmed.html?attending=${anyYes ? 'yes' : 'no'}`;
         });
     </script>
 </body>
