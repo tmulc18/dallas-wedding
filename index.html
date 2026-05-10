@@ -94,6 +94,9 @@
 
         .rsvp-link {
             display: block;
+            width: fit-content;
+            margin: 0 auto;
+            padding: 0.2em 0.6em;
             font-family: 'Cedarville Cursive', cursive;
             font-size: 16vw;
             color: var(--text-dark);
@@ -101,8 +104,14 @@
             letter-spacing: 0.02em;
             text-align: center;
             line-height: 1;
+            border: 0.06em solid var(--text-dark);
+            border-radius: 0.12em;
+            transition: background-color 0.2s ease, color 0.2s ease;
         }
-        .rsvp-link:hover { opacity: 0.75; }
+        .rsvp-link:hover {
+            background-color: var(--text-dark);
+            color: var(--bg-color);
+        }
 
         @media (max-width: 768px) {
             .rsvp-link { font-size: 26vw; }
