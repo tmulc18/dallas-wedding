@@ -30,9 +30,31 @@
         }
 
         .page {
-            max-width: 560px;
+            max-width: 1120px;
             margin: 0 auto;
             padding: 4rem 1.5rem 6rem;
+            position: relative;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .photo img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .layout {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
         }
 
         .home-link {
@@ -58,7 +80,24 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
             color: var(--muted);
+            margin: 0 0 1.25rem;
+        }
+
+        .venue {
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--muted);
+            text-decoration: none;
             margin: 0 0 2.5rem;
+            line-height: 1.7;
+            transition: opacity 0.15s;
+        }
+        .venue:hover { opacity: 0.7; }
+        .venue strong {
+            color: #1a1a1a;
+            font-weight: 600;
         }
 
         label {
@@ -194,33 +233,46 @@
     <div class="page">
         <a class="home-link" href="/">← back</a>
 
-        <h1>rsvp</h1>
-        <p class="subtitle">November 21, 2026 · Dallas, TX</p>
+        <div class="layout">
+            <div class="content">
+                <h1>rsvp</h1>
+                <p class="subtitle">November 21, 2026</p>
+                <a class="venue"
+                   href="https://www.google.com/maps/search/?api=1&query=Astoria+Event+Venue+3216+Royalty+Row+Irving+TX+75062"
+                   target="_blank" rel="noopener">
+                    <strong>Astoria Event Venue</strong><br>3216 Royalty Row, Irving, TX 75062
+                </a>
 
-        <!-- ===== Lookup view ===== -->
-        <section id="lookup-view">
-            <form id="lookup-form" novalidate>
-                <label for="phone">Your phone number</label>
-                <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(214) 555-0123" required>
-                <div class="submit-row">
-                    <button type="submit" id="lookup-btn">Look me up</button>
-                </div>
-            </form>
-            <p id="lookup-message" class="message" role="status"></p>
-        </section>
+                <!-- ===== Lookup view ===== -->
+                <section id="lookup-view">
+                    <form id="lookup-form" novalidate>
+                        <label for="phone">Your phone number</label>
+                        <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(214) 555-0123" required>
+                        <div class="submit-row">
+                            <button type="submit" id="lookup-btn">Look me up</button>
+                        </div>
+                    </form>
+                    <p id="lookup-message" class="message" role="status"></p>
+                </section>
 
-        <!-- ===== Response view ===== -->
-        <section id="response-view" class="hidden">
-            <form id="response-form" novalidate>
-                <div id="rows"></div>
-                <button type="button" id="add-row" class="add-another hidden">+ add another family member</button>
-                <div class="submit-row">
-                    <button type="button" id="back-btn" class="ghost">Back</button>
-                    <button type="submit" id="submit-btn">Submit RSVP</button>
-                </div>
-            </form>
-            <p id="response-message" class="message" role="status"></p>
-        </section>
+                <!-- ===== Response view ===== -->
+                <section id="response-view" class="hidden">
+                    <form id="response-form" novalidate>
+                        <div id="rows"></div>
+                        <button type="button" id="add-row" class="add-another hidden">+ add another family member</button>
+                        <div class="submit-row">
+                            <button type="button" id="back-btn" class="ghost">Back</button>
+                            <button type="submit" id="submit-btn">Submit RSVP</button>
+                        </div>
+                    </form>
+                    <p id="response-message" class="message" role="status"></p>
+                </section>
+            </div>
+
+            <div class="photo">
+                <img src="/engagement.jpg" alt="Farbeen and Tommy">
+            </div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -264,18 +316,13 @@
             el.className = 'message' + (kind ? ' ' + kind : '');
         }
 
-        function rowTemplate({ name, editable }) {
+        function rowTemplate({ name }) {
             const row = document.createElement('div');
             row.className = 'guest-row';
-            const nameId = 'name-' + Math.random().toString(36).slice(2, 8);
             const groupId = 'att-' + Math.random().toString(36).slice(2, 8);
 
-            const nameHtml = editable
-                ? `<input type="text" placeholder="Guest name" autocomplete="name" required>`
-                : `${escapeHtml(name)}`;
-
             row.innerHTML = `
-                <div class="guest-name">${nameHtml}</div>
+                <div class="guest-name"><input type="text" placeholder="Guest name" autocomplete="name" value="${escapeHtml(name || '')}" required></div>
                 <div class="yes-no">
                     <input type="radio" id="${groupId}-y" name="${groupId}" value="yes">
                     <label for="${groupId}-y">Attending</label>
@@ -283,7 +330,6 @@
                     <label for="${groupId}-n">Can't make it</label>
                 </div>
             `;
-            row.dataset.editable = editable ? '1' : '0';
             return row;
         }
 
@@ -297,10 +343,10 @@
             rowsEl.innerHTML = '';
 
             if (knownGuests.length > 0) {
-                knownGuests.forEach(name => rowsEl.appendChild(rowTemplate({ name, editable: false })));
+                knownGuests.forEach(name => rowsEl.appendChild(rowTemplate({ name })));
                 addRowBtn.classList.add('hidden');
             } else {
-                rowsEl.appendChild(rowTemplate({ name: '', editable: true }));
+                rowsEl.appendChild(rowTemplate({ name: '' }));
                 updateAddButton();
             }
             lookupView.classList.add('hidden');
@@ -319,7 +365,7 @@
 
         addRowBtn.addEventListener('click', () => {
             if (rowsEl.children.length >= currentCap) return;
-            rowsEl.appendChild(rowTemplate({ name: '', editable: true }));
+            rowsEl.appendChild(rowTemplate({ name: '' }));
             updateAddButton();
         });
 
@@ -365,13 +411,10 @@
             e.preventDefault();
             const responses = [];
             for (const row of rowsEl.children) {
-                const editable = row.dataset.editable === '1';
-                const name = editable
-                    ? row.querySelector('input[type="text"]').value.trim()
-                    : row.querySelector('.guest-name').textContent.trim();
+                const name = row.querySelector('input[type="text"]').value.trim();
                 const checked = row.querySelector('input[type="radio"]:checked');
 
-                if (editable && !name) {
+                if (!name) {
                     setMessage(respMsg, 'Please enter a name for each guest.', 'error');
                     return;
                 }
