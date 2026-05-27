@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You're Invited — Farbeen & Tommy</title>
+    <link rel="icon" href="/apple-touch-icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
+
+        :root {
+            --bg-color: #f0ece3;
+            --text-dark: #9b111e;
+            --outline-color: #bebaa9;
+            --muted: #6b5e54;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-weight: 500;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        .page {
+            max-width: 620px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem 6rem;
+        }
+
+        .home-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-family: 'Cedarville Cursive', cursive;
+            font-size: 1.4rem;
+        }
+
+        .invitation {
+            position: relative;
+            padding: 3.5rem 2rem;
+            border: 1px solid var(--text-dark);
+            text-align: center;
+        }
+        .invitation::before {
+            content: '';
+            position: absolute;
+            inset: 5px;
+            border: 1px solid var(--text-dark);
+            pointer-events: none;
+        }
+
+        .invitation-body {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #1a1a1a;
+            margin: 0;
+        }
+        .invitation-names {
+            font-size: 1rem;
+            line-height: 2.2;
+            margin: 3rem 0;
+        }
+        .invitation-names .names {
+            font-weight: 700;
+        }
+        .invitation-names + .invitation-body {
+            margin-bottom: 2.25rem;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--muted);
+            margin: 0 0 1.25rem;
+        }
+
+        .venue {
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--muted);
+            text-decoration: none;
+            margin: 0;
+            line-height: 1.7;
+            transition: opacity 0.15s;
+        }
+        .venue:hover { opacity: 0.7; }
+        .venue strong {
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .invitation-deadline {
+            margin: 2rem 0 0;
+            font-style: italic;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .rsvp-cta {
+            display: block;
+            width: fit-content;
+            margin: 3rem auto 0;
+            padding: 0.3em 1em;
+            font-family: 'Cedarville Cursive', cursive;
+            font-size: 2.6rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            line-height: 1;
+            border: 0.06em solid var(--text-dark);
+            border-radius: 0.12em;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .rsvp-cta:hover {
+            background-color: var(--text-dark);
+            color: var(--bg-color);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <a class="home-link" href="/">← back</a>
+
+        <div class="invitation">
+            <p class="invitation-body">
+                Mr. Mohammad Rahman and Mrs. Habiba Rahman<br>
+                are excited to invite you to celebrate<br>
+                the wedding of their daughter
+            </p>
+            <p class="invitation-names">
+                <span class="names">Farbeen Safa</span><br>
+                and<br>
+                <span class="names">Tommy Mulc</span>
+            </p>
+            <p class="invitation-body">
+                son of Mr. Vlado Mulc and Mrs. Janja Mulc
+            </p>
+            <p class="subtitle">November 21, 2026</p>
+            <a class="venue"
+               href="https://www.google.com/maps/search/?api=1&query=Astoria+Event+Venue+3216+Royalty+Row+Irving+TX+75062"
+               target="_blank" rel="noopener">
+                <strong>Astoria Event Venue</strong><br>3216 Royalty Row, Irving, TX 75062
+            </a>
+            <p class="invitation-deadline">Please RSVP by September 21st.</p>
+        </div>
+
+        <a class="rsvp-cta" href="/rsvp/">rsvp</a>
+    </div>
+</body>
+
+</html>
