@@ -344,11 +344,10 @@
 
             if (knownGuests.length > 0) {
                 knownGuests.forEach(name => rowsEl.appendChild(rowTemplate({ name })));
-                addRowBtn.classList.add('hidden');
             } else {
                 rowsEl.appendChild(rowTemplate({ name: '' }));
-                updateAddButton();
             }
+            updateAddButton();
             lookupView.classList.add('hidden');
             responseView.classList.remove('hidden');
             setMessage(respMsg, '', '');
@@ -356,7 +355,7 @@
 
         function updateAddButton() {
             const count = rowsEl.children.length;
-            if (knownGuests.length === 0 && count < currentCap) {
+            if (count < currentCap) {
                 addRowBtn.classList.remove('hidden');
             } else {
                 addRowBtn.classList.add('hidden');
