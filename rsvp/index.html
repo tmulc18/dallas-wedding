@@ -364,8 +364,12 @@
 
         function updateAddButton() {
             const count = rowsEl.children.length;
+            const initialCount = Math.max(knownGuests.length, 1);
             if (count < currentCap) {
                 addRowBtn.classList.remove('hidden');
+                addRowBtn.textContent = count <= initialCount
+                    ? 'Add + 1'
+                    : '+ add another family member';
             } else {
                 addRowBtn.classList.add('hidden');
             }
