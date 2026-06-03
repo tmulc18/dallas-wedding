@@ -71,41 +71,45 @@
         }
         .invitation-names .names {
             font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
         }
         .invitation-names + .invitation-body {
             margin-bottom: 2.25rem;
         }
 
         .subtitle {
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--muted);
-            margin: 0 0 1.25rem;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin: 0 0 1rem;
         }
 
         .venue {
             display: block;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #1a1a1a;
             text-decoration: none;
             margin: 0;
-            line-height: 1.7;
             transition: opacity 0.15s;
         }
         .venue:hover { opacity: 0.7; }
         .venue strong {
-            color: #1a1a1a;
-            font-weight: 600;
+            font-weight: 700;
         }
 
+        .dress-code,
         .invitation-deadline {
-            margin: 2rem 0 0;
-            font-style: italic;
+            margin: 1.5rem auto 0;
+            max-width: 28em;
+            font-size: 1rem;
+            line-height: 1.55;
             color: var(--muted);
-            font-size: 0.95rem;
+        }
+        .invitation-deadline {
+            font-style: italic;
         }
 
         .rsvp-cta {
@@ -153,6 +157,7 @@
                target="_blank" rel="noopener">
                 <strong>Astoria Event Venue</strong><br>3216 Royalty Row, Irving, TX 75062
             </a>
+            <p class="dress-code">Black tie optional. Desi or American attire welcome.<br>Dark hues kindly requested.</p>
             <p class="invitation-deadline">Please RSVP by September 21st.</p>
         </div>
 
