@@ -169,6 +169,13 @@
 
         .hidden { display: none !important; }
 
+        .lookup-intro {
+            margin: 0 0 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.55;
+            color: var(--muted);
+        }
+
         /* Response view */
         .guest-row {
             border-top: 1px solid var(--outline-color);
@@ -237,7 +244,7 @@
         <div class="layout">
             <div class="content">
                 <h1>rsvp</h1>
-                <p class="subtitle">November 21, 2026</p>
+                <p class="subtitle">November 21, 2026 &middot; 6pm</p>
                 <a class="venue"
                    href="https://www.google.com/maps/search/?api=1&query=Astoria+Event+Venue+3216+Royalty+Row+Irving+TX+75062"
                    target="_blank" rel="noopener">
@@ -246,6 +253,7 @@
 
                 <!-- ===== Lookup view ===== -->
                 <section id="lookup-view">
+                    <p class="lookup-intro">You're able to respond for all attendees in your party at once&mdash;you, your guest(s), or your family.</p>
                     <form id="lookup-form" novalidate>
                         <label for="phone">Your phone number</label>
                         <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(214) 555-0123" required>
