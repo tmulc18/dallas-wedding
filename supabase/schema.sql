@@ -4,11 +4,20 @@
 
 -- Tables -------------------------------------------------------------
 create table if not exists guest_list (
-  phone        text primary key,           -- E.164, e.g. +12145550123
+  phone        text primary key,           -- E.164, e.g. +12145550123 (primary phone for the party)
   guests       text[]      not null default '{}',
   num_allowed  int         not null check (num_allowed > 0),
   created_at   timestamptz not null default now()
 );
+
+-- Additional phones that resolve to the same party. Lets either member of a
+-- household look up their invite with their own number.
+create table if not exists phone_aliases (
+  alias_phone    text primary key,         -- E.164
+  primary_phone  text not null references guest_list(phone) on delete cascade,
+  created_at     timestamptz not null default now()
+);
+create index if not exists phone_aliases_primary_idx on phone_aliases(primary_phone);
 
 create table if not exists rsvps (
   id          uuid primary key default gen_random_uuid(),
@@ -21,8 +30,27 @@ create table if not exists rsvps (
 );
 
 -- RLS: deny everything by default. Only the security-definer RPCs touch data.
-alter table guest_list enable row level security;
-alter table rsvps      enable row level security;
+alter table guest_list    enable row level security;
+alter table phone_aliases enable row level security;
+alter table rsvps         enable row level security;
+
+-- Resolve a possibly-alias phone to the primary phone in guest_list.
+-- Returns NULL when the phone is unknown.
+create or replace function resolve_phone(p_phone text)
+returns text
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select coalesce(
+    (select phone from guest_list where phone = p_phone),
+    (select primary_phone from phone_aliases where alias_phone = p_phone)
+  );
+$$;
+
+revoke all on function resolve_phone(text) from public;
+grant  execute on function resolve_phone(text) to anon, authenticated;
 
 -- RPC: lookup --------------------------------------------------------
 create or replace function lookup_guest(p_phone text)
@@ -31,9 +59,9 @@ language sql
 security definer
 set search_path = public
 as $$
-  select phone, guests, num_allowed
-  from guest_list
-  where phone = p_phone;
+  select gl.phone, gl.guests, gl.num_allowed
+  from guest_list gl
+  where gl.phone = resolve_phone(p_phone);
 $$;
 
 revoke all on function lookup_guest(text) from public;
@@ -49,17 +77,20 @@ security definer
 set search_path = public
 as $$
 declare
+  v_phone   text;
   v_allowed int;
   r         jsonb;
   v_name    text;
 begin
-  select num_allowed into v_allowed
-    from guest_list
-   where phone = p_phone;
+  v_phone := resolve_phone(p_phone);
 
-  if not found then
+  if v_phone is null then
     raise exception 'unknown phone';
   end if;
+
+  select num_allowed into v_allowed
+    from guest_list
+   where phone = v_phone;
 
   if jsonb_typeof(p_responses) <> 'array' then
     raise exception 'p_responses must be a JSON array';
@@ -73,7 +104,7 @@ begin
     raise exception 'too many responses (max %)', v_allowed;
   end if;
 
-  delete from rsvps where phone = p_phone;
+  delete from rsvps where phone = v_phone;
 
   for r in select * from jsonb_array_elements(p_responses) loop
     v_name := trim(r->>'name');
@@ -81,7 +112,7 @@ begin
       raise exception 'each response needs a non-empty name';
     end if;
     insert into rsvps(phone, guest_name, attending)
-    values (p_phone, v_name, (r->>'attending')::boolean)
+    values (v_phone, v_name, (r->>'attending')::boolean)
     on conflict (phone, guest_name) do update
       set attending  = excluded.attending,
           updated_at = now();
