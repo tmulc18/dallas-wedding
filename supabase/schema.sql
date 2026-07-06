@@ -67,6 +67,24 @@ $$;
 revoke all on function lookup_guest(text) from public;
 grant  execute on function lookup_guest(text) to anon, authenticated;
 
+-- RPC: lookup existing responses ------------------------------------
+-- Returns the party's previously-submitted RSVP rows (empty if none yet),
+-- so a returning guest sees and can edit their prior selections.
+create or replace function lookup_rsvp(p_phone text)
+returns table(guest_name text, attending boolean)
+language sql
+security definer
+set search_path = public
+as $$
+  select rs.guest_name, rs.attending
+  from rsvps rs
+  where rs.phone = resolve_phone(p_phone)
+  order by rs.created_at;
+$$;
+
+revoke all on function lookup_rsvp(text) from public;
+grant  execute on function lookup_rsvp(text) to anon, authenticated;
+
 -- RPC: submit --------------------------------------------------------
 -- p_responses: jsonb array of {name: text, attending: bool}
 -- Replaces all prior responses for this phone atomically.

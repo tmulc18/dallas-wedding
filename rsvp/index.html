@@ -308,6 +308,7 @@
         let currentPhone = null;
         let currentCap = 1;
         let knownGuests = [];
+        let existingResponses = [];  // prior RSVP rows: [{ name, attending: bool }]
 
         // ===== DOM =====
         const lookupView = document.getElementById('lookup-view');
@@ -325,17 +326,19 @@
             el.className = 'message' + (kind ? ' ' + kind : '');
         }
 
-        function rowTemplate({ name }) {
+        function rowTemplate({ name, attending }) {
             const row = document.createElement('div');
             row.className = 'guest-row';
             const groupId = 'att-' + Math.random().toString(36).slice(2, 8);
+            const yesChecked = attending === true ? ' checked' : '';
+            const noChecked  = attending === false ? ' checked' : '';
 
             row.innerHTML = `
                 <div class="guest-name"><input type="text" placeholder="Guest name" autocomplete="name" value="${escapeHtml(name || '')}" required></div>
                 <div class="yes-no">
-                    <input type="radio" id="${groupId}-y" name="${groupId}" value="yes">
+                    <input type="radio" id="${groupId}-y" name="${groupId}" value="yes"${yesChecked}>
                     <label for="${groupId}-y">Attending</label>
-                    <input type="radio" id="${groupId}-n" name="${groupId}" value="no">
+                    <input type="radio" id="${groupId}-n" name="${groupId}" value="no"${noChecked}>
                     <label for="${groupId}-n">Can't make it</label>
                 </div>
             `;
@@ -351,15 +354,37 @@
         function renderResponseView() {
             rowsEl.innerHTML = '';
 
-            if (knownGuests.length > 0) {
-                knownGuests.forEach(name => rowsEl.appendChild(rowTemplate({ name })));
-            } else {
-                rowsEl.appendChild(rowTemplate({ name: '' }));
-            }
+            // Merge known guests with any prior responses so returning guests see
+            // (and can edit) what they already submitted. Match on name, case- and
+            // whitespace-insensitively; append any prior names not on the roster.
+            const norm = s => (s || '').trim().toLowerCase();
+            const priorByName = new Map(existingResponses.map(r => [norm(r.name), r]));
+            const rows = [];
+            const usedNames = new Set();
+
+            knownGuests.forEach(name => {
+                const prior = priorByName.get(norm(name));
+                if (prior) usedNames.add(norm(name));
+                rows.push({ name, attending: prior ? prior.attending : undefined });
+            });
+            // Extra family members the guest previously added themselves.
+            existingResponses.forEach(r => {
+                if (!usedNames.has(norm(r.name))) {
+                    rows.push({ name: r.name, attending: r.attending });
+                }
+            });
+
+            if (rows.length === 0) rows.push({ name: '', attending: undefined });
+            rows.forEach(r => rowsEl.appendChild(rowTemplate(r)));
+
             updateAddButton();
             lookupView.classList.add('hidden');
             responseView.classList.remove('hidden');
-            setMessage(respMsg, '', '');
+            if (existingResponses.length > 0) {
+                setMessage(respMsg, 'We found your previous RSVP below. Update it and resubmit anytime.', 'success');
+            } else {
+                setMessage(respMsg, '', '');
+            }
         }
 
         function updateAddButton() {
@@ -398,9 +423,13 @@
             lookupBtn.disabled = true;
             setMessage(lookupMsg, 'Looking…', '');
 
-            const { data, error } = await sb.rpc('lookup_guest', { p_phone: phone });
+            const [guestRes, rsvpRes] = await Promise.all([
+                sb.rpc('lookup_guest', { p_phone: phone }),
+                sb.rpc('lookup_rsvp', { p_phone: phone }),
+            ]);
             lookupBtn.disabled = false;
 
+            const { data, error } = guestRes;
             if (error) {
                 setMessage(lookupMsg, "Something went wrong. Please try again in a moment.", 'error');
                 console.error(error);
@@ -415,6 +444,16 @@
             currentPhone = row.phone;
             currentCap = row.num_allowed;
             knownGuests = row.guests || [];
+            // Prior submissions (if any), so the guest can review/edit them.
+            if (rsvpRes.error) {
+                console.error(rsvpRes.error);
+                existingResponses = [];
+            } else {
+                existingResponses = (rsvpRes.data || []).map(r => ({
+                    name: r.guest_name,
+                    attending: r.attending,
+                }));
+            }
             renderResponseView();
         });
 
