@@ -301,6 +301,8 @@
             if (!/^\d+$/.test(digits)) return null;
             if (digits.length === 10) return '+1' + digits;
             if (digits.length === 11 && digits.startsWith('1')) return '+' + digits;
+            // Bare international number (e.g. Croatia 385...): treat as E.164.
+            if (digits.length >= 11 && digits.length <= 15) return '+' + digits;
             return null;
         }
 
