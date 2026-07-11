@@ -32,6 +32,72 @@
             overflow-x: hidden;
         }
 
+        /* --- FIXED NAV --- */
+        .site-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 3rem;
+            background-color: var(--bg-color);
+            border-bottom: 1px solid var(--espresso-color);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .site-nav.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .site-nav-logo {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .logo-svg {
+            width: 44px;
+            height: 44px;
+            display: block;
+            overflow: visible;
+        }
+
+        .logo-svg .logo-text {
+            font-family: 'Cedarville Cursive', cursive;
+            font-size: 75px;
+            fill: var(--text-dark);
+        }
+
+        .site-nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .site-nav-links a {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--sketch-color);
+            text-decoration: none;
+            border-bottom: 1.5px solid transparent;
+            padding-bottom: 2px;
+            transition: border-color 0.2s ease, color 0.2s ease;
+        }
+
+        .site-nav-links a:hover {
+            color: var(--text-dark);
+            border-bottom-color: var(--text-dark);
+        }
+
         /* --- BACKGROUND LAYER --- */
         .bg-layer {
             position: fixed;
@@ -92,6 +158,13 @@
             letter-spacing: -0.01em;
         }
 
+        /* RSVP + scroll cue share a centered stack */
+        .rsvp-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         .rsvp-link {
             display: block;
             width: fit-content;
@@ -113,11 +186,48 @@
             color: var(--bg-color);
         }
 
-        @media (max-width: 768px) {
-            .rsvp-link { font-size: 14vw; }
+        /* --- SCROLL FOR MORE INFO CUE --- */
+        .scroll-cue {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 3.5rem;
+            text-decoration: none;
+            color: var(--text-dark);
+            cursor: pointer;
+            background: none;
+            border: none;
         }
 
-        /* --- NEW: COFFEE RAVE SECTION --- */
+        .scroll-cue-text {
+            font-family: 'Cedarville Cursive', cursive;
+            font-size: 2rem;
+            line-height: 1;
+            opacity: 0.85;
+        }
+
+        .scroll-cue-arrow {
+            font-size: 1.6rem;
+            line-height: 1;
+            animation: cue-bounce 1.8s ease-in-out infinite;
+        }
+
+        @keyframes cue-bounce {
+            0%, 100% { transform: translateY(0); opacity: 0.7; }
+            50%      { transform: translateY(10px); opacity: 1; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .scroll-cue-arrow { animation: none; }
+        }
+
+        @media (max-width: 768px) {
+            .rsvp-link { font-size: 14vw; }
+            .scroll-cue-text { font-size: 1.6rem; }
+        }
+
+        /* --- COFFEE RAVE (LOCK-IN) TRANSITION --- */
         .coffee-section {
             position: relative;
             height: 100vh;
@@ -140,27 +250,10 @@
 
         .lock-text {
             font-size: 8vw;
-            margin-bottom: 2rem;
             z-index: 11;
         }
 
-        /* The SVG Espresso Machine */
-        .svg-machine {
-            position: relative;
-            width: 450px;
-            height: 270px;
-            z-index: 10;
-        }
-
-        .svg-machine svg {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            height: 100%;
-            overflow: visible;
-        }
-
-        /* The expanding background circle */
+        /* The expanding circle takeover */
         .espresso-flood {
             position: fixed;
             top: 50%;
@@ -174,81 +267,218 @@
             pointer-events: none;
         }
 
-        /* --- THE AGENDA --- */
-        .agenda-content {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            z-index: 30;
+        /* --- INFO SECTIONS (Events + Things to Do) ---
+           Styling mirrors the original agenda overlay: cursive section
+           titles in red, 3-column bold uppercase rows with subtle
+           border-bottom dividers. */
+        .info-section {
+            position: relative;
+            z-index: 50;
+            background-color: var(--bg-color);
+            padding: 14vh 8vw;
+            box-sizing: border-box;
             text-align: center;
-            width: 90%;
-            max-width: 1100px;
-            opacity: 0;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
         }
 
-        .agenda-title {
+        .info-header {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 6.5vw;
+            font-weight: 800;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            margin: 0 0 5vh 0;
+            white-space: nowrap;
+        }
+
+        /* Events */
+        .event-block {
+            margin: 0 auto 11vh auto;
+            max-width: 720px;
+        }
+
+        .event-title {
             font-family: 'Cedarville Cursive', cursive;
-            font-size: 8vw;
+            font-size: 3.2vw;
             font-weight: normal;
             color: var(--text-dark);
-            text-shadow: none;
-            margin-bottom: 2rem;
             text-transform: none;
+            letter-spacing: normal;
+            margin: 0 0 0.4rem 0;
         }
 
-        .agenda-list {
+        .event-date {
+            font-size: 1.3vw;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            color: var(--sketch-color);
+            opacity: 0.55;
+            text-transform: uppercase;
+            margin: 0 0 2rem 0;
+        }
+
+        .event-list {
             list-style: none;
             padding: 0;
-            font-size: 2vw;
+            margin: 0;
+            font-size: 1.4vw;
             font-weight: bold;
             line-height: 1.5;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            width: 100%;
-            max-width: 1000px;
-            margin: 0;
+            letter-spacing: 1px;
             display: flex;
             flex-direction: column;
             gap: 1rem;
         }
 
-        .agenda-list li {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+        .event-list li {
+            display: flex;
+            flex-direction: column;
             align-items: center;
+            gap: 0.3rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+            padding-bottom: 0.9rem;
+        }
+
+        .event-list li span { color: var(--sketch-color); white-space: nowrap; }
+
+        /* Time gets a touch of emphasis as the first line */
+        .event-list li span.time { color: var(--text-dark); }
+
+        .event-list a {
+            color: inherit;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            transition: color 0.15s ease;
+        }
+        .event-list a:hover { color: var(--text-dark); }
+
+        .event-note {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 1.1vw;
+            font-weight: 700;
+            margin: 1.25rem 0 0 0;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .event-note .dress  { color: #624014; }
+        .event-note .attire { color: #39582f; }
+
+        .event-note a {
+            color: #6b6b6b;
+            text-decoration: underline;
+        }
+
+        .event-attire {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 1vw;
+            font-weight: 600;
+            color: var(--sketch-color);
+            opacity: 0.65;
+            max-width: 34em;
+            line-height: 1.5;
+            margin: 0.6rem auto 0;
+        }
+
+        .events-more {
+            font-family: 'Cedarville Cursive', cursive;
+            font-size: 2vw;
+            color: var(--sketch-color);
+            opacity: 0.65;
+            margin: 0;
+        }
+
+        /* Hotel + Registry (simple sections with a CTA) */
+        .info-text {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 1.25vw;
+            font-weight: 600;
+            line-height: 1.6;
+            color: var(--sketch-color);
+            max-width: 32em;
+            margin: 0 auto 4vh auto;
+        }
+
+        .info-cta {
+            display: inline-block;
+            padding: 0.3em 1em;
+            font-family: 'Cedarville Cursive', cursive;
+            font-size: 3vw;
+            color: var(--text-dark);
+            text-decoration: none;
+            line-height: 1;
+            border: 0.06em solid var(--text-dark);
+            border-radius: 0.12em;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .info-cta:hover {
+            background-color: var(--text-dark);
+            color: var(--bg-color);
+        }
+
+        /* Things to Do */
+        .things-sub {
+            font-family: 'Cedarville Cursive', cursive;
+            font-size: 2vw;
+            color: var(--sketch-color);
+            opacity: 0.7;
+            margin: -2vh 0 6vh 0;
+        }
+
+        .things-block {
+            margin: 0 auto 6vh auto;
+            max-width: 720px;
+        }
+
+        .things-title {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 3vw;
+            font-weight: 800;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            margin: 0 0 1.5rem 0;
+        }
+
+        .things-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 1.4vw;
+            font-weight: bold;
+            line-height: 1.5;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            color: var(--sketch-color);
+        }
+
+        .things-list li {
+            text-align: left;
             border-bottom: 1px solid rgba(0, 0, 0, 0.15);
             padding-bottom: 0.5rem;
         }
 
-        .agenda-list span.event {
+        .things-list li.soon {
+            opacity: 0.45;
+            font-style: italic;
+            text-transform: none;
+            letter-spacing: normal;
+            font-weight: 600;
+        }
+
+        .things-list a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+
+        .things-list a:hover {
             color: var(--text-dark);
-            white-space: nowrap;
-            text-align: left;
-        }
-
-        .agenda-list span.location {
-            color: #333;
-            white-space: nowrap;
-            text-align: center;
-        }
-
-        .agenda-list span.time {
-            color: var(--text-dark);
-            white-space: nowrap;
-            text-align: right;
-        }
-
-        .more-details {
-            font-family: 'Cedarville Cursive', cursive;
-            margin-top: 2rem;
-            font-size: 2vw;
-            font-style: normal;
-            opacity: 0.7;
         }
 
         /* Mobile Adjustments */
@@ -257,47 +487,107 @@
                 -webkit-text-stroke: 1px var(--outline-color);
             }
 
-            .agenda-title {
-                font-size: 12vw;
+            .site-nav {
+                padding: 0.9rem 1.25rem;
             }
 
-            .agenda-list {
+            .logo-svg {
+                width: 34px;
+                height: 34px;
+            }
+
+            .site-nav-links {
+                gap: 0.85rem;
+            }
+
+            .site-nav-links a {
+                font-size: 0.7rem;
+                letter-spacing: 0.06em;
+            }
+
+            .info-section {
+                padding: 10vh 6vw;
+            }
+
+            .info-text {
+                font-size: 3.6vw;
+            }
+
+            .info-cta {
+                font-size: 7vw;
+            }
+
+            .info-header {
+                font-size: 11vw;
+                margin-bottom: 4vh;
+                white-space: normal;
+                line-height: 1.05;
+            }
+
+            .event-title {
+                font-size: 7vw;
+            }
+
+            .event-date {
+                font-size: 3vw;
+            }
+
+            .event-list {
+                font-size: 3.2vw;
+                letter-spacing: 1px;
+            }
+
+            .event-note {
+                font-size: 3vw;
+            }
+
+            .event-attire {
+                font-size: 2.8vw;
+            }
+
+            .events-more {
+                font-size: 4.5vw;
+            }
+
+            .things-sub {
+                font-size: 4.5vw;
+            }
+
+            .things-title {
+                font-size: 6vw;
+            }
+
+            .things-list {
                 font-size: 3.5vw;
-            }
-
-            .agenda-list li {
-                grid-template-columns: 1fr 1fr 1fr;
-            }
-
-            .agenda-list span.event {
-                text-align: left;
-            }
-
-            .agenda-list span.location {
-                text-align: center;
-            }
-
-            .agenda-list span.time {
-                text-align: right;
-            }
-
-            .more-details {
-                font-size: 4vw;
+                letter-spacing: 1px;
             }
 
             .lock-text {
                 font-size: 11vw;
-            }
-
-            .svg-machine {
-                width: 380px;
-                height: 228px;
             }
         }
     </style>
 </head>
 
 <body>
+
+    <!-- Fixed nav, fades in once the user reaches the events section -->
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+        <a href="#" class="site-nav-logo" aria-label="Back to top">
+            <svg class="logo-svg" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <g transform="translate(5, 5)">
+                    <text x="50" y="70" text-anchor="middle" class="logo-text">ft</text>
+                    <path d="M 85,15 Q 85,30 70,30 Q 85,30 85,45 Q 85,30 100,30 Q 85,30 85,15 Z M 73,10 Q 73,17 66,17 Q 73,17 73,24 Q 73,17 80,17 Q 73,17 73,10 Z" fill="var(--text-dark)"/>
+                </g>
+            </svg>
+        </a>
+        <div class="site-nav-links">
+            <a href="#events-section">Events</a>
+            <a href="#hotel-section">Stay</a>
+            <!-- <a href="#things-section">Dallas</a> -->
+            <a href="#registry-section">Registry</a>
+        </div>
+    </nav>
 
     <!-- 1. Background Parallax Layer -->
     <div class="bg-layer" id="parallax-bg"></div>
@@ -306,25 +596,106 @@
     <div class="content-layer">
         <h1 class="fg-text" id="section-date">NOVEMBER 21 2026</h1>
         <h1 class="fg-text location" id="section-location">DALLAS,  TX</h1>
-        <a class="rsvp-link" id="section-rsvp" href="/invite/">rsvp</a>
+        <div class="rsvp-block" id="section-rsvp">
+            <a class="rsvp-link" href="/invite/">rsvp</a>
+            <button class="scroll-cue" id="scroll-cue" aria-label="Scroll for more info">
+                <span class="scroll-cue-text">scroll for more info</span>
+                <span class="scroll-cue-arrow" aria-hidden="true">&#8595;</span>
+            </button>
+        </div>
     </div>
 
-    <!-- COMMENTED OUT: Transition section and details - showing only save the date for now -->
-    <!--
+    <!-- 3. The GSAP circle-wipe transition -->
     <section class="coffee-section">
+        <div class="machine-container">
+            <!-- <h1 class="fg-text lock-text">LOCK IN TO PARTY</h1> -->
+        </div>
     </section>
 
+    <!-- Expanding circle that wipes the screen at the end of the transition -->
     <div class="espresso-flood"></div>
 
-    <div class="agenda-content">
-        <h2 class="agenda-title">details</h2>
-        <ul class="agenda-list">
-            <li><span class="event">Dinner</span> <span class="location">TBD</span> <span class="time">TBD</span>
-            </li>
-        </ul>
-        <p class="more-details">more to come ...</p>
-    </div>
+    <!-- ==========================================
+         EVENTS SECTION
+         ========================================== -->
+    <section id="events-section" class="info-section">
+        <h2 class="info-header">EVENTS</h2>
+
+        <div class="event-block">
+            <h3 class="event-title">welcome</h3>
+            <p class="event-date">FRIDAY, NOV 20TH</p>
+            <ul class="event-list">
+                <li><span class="time">TBD</span><span class="event">Details to come</span></li>
+            </ul>
+        </div>
+
+        <div class="event-block">
+            <h3 class="event-title">reception</h3>
+            <p class="event-date">SATURDAY, NOV 21ST</p>
+            <ul class="event-list">
+                <li><span class="time">6 PM</span><span class="event">Cocktails + Dinner</span><span class="location"><a href="https://www.google.com/maps/search/?api=1&amp;query=Astoria+Event+Venue+3216+Royalty+Row+Irving+TX+75062" target="_blank" rel="noopener">Astoria Event Venue</a></span></li>
+            </ul>
+            <p class="event-note"><span class="dress">Formal Desi or Western attire.</span> <span class="attire">Dark hues are kindly requested.</span> <a href="https://www.pinterest.com/farbeens/1121-guest-attire/" target="_blank" rel="noopener">inspo here</a></p>
+            <p class="event-attire">Dark Suits/Kurtas/Sherwanis and Dresses/Sarees/Lehengas/Pant Suits are all welcome.</p>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         HOTEL BLOCK SECTION
+         ========================================== -->
+    <section id="hotel-section" class="info-section">
+        <h2 class="info-header">STAY</h2>
+        <p class="info-text">We've reserved a block of rooms for our guests at a special group rate. Book early &mdash; the block is limited.</p>
+        <a class="info-cta" href="https://book.passkey.com/event/51272246/owner/8154/landing" target="_blank" rel="noopener">book a room</a>
+    </section>
+
+    <!-- ==========================================
+         THINGS TO DO SECTION (hidden for now — re-enable
+         by uncommenting this section + its nav link above)
+         ========================================== -->
+    <!--
+    <section id="things-section" class="info-section">
+        <h2 class="info-header">DALLAS'S GREATEST HITS</h2>
+        <p class="things-sub">our favs for those wondering &mdash; coming soon</p>
+
+        <div class="things-block">
+            <h3 class="things-title">ACTIVITIES</h3>
+            <ul class="things-list">
+                <li class="soon">coming soon &#10022;</li>
+            </ul>
+        </div>
+
+        <div class="things-block">
+            <h3 class="things-title">EATS</h3>
+            <ul class="things-list">
+                <li class="soon">coming soon &#10022;</li>
+            </ul>
+        </div>
+
+        <div class="things-block">
+            <h3 class="things-title">COFFEE &amp; MATCHA</h3>
+            <ul class="things-list">
+                <li class="soon">coming soon &#10022;</li>
+            </ul>
+        </div>
+
+        <div class="things-block">
+            <h3 class="things-title">BARS</h3>
+            <ul class="things-list">
+                <li class="soon">coming soon &#10022;</li>
+            </ul>
+        </div>
+    </section>
     -->
+
+    <!-- ==========================================
+         REGISTRY SECTION
+         ========================================== -->
+    <section id="registry-section" class="info-section">
+        <h2 class="info-header">REGISTRY</h2>
+        <p class="info-text">Your presence is the greatest gift. For those who have asked, we've set up a honeyfund to help kick off our next chapter together.</p>
+        <a class="info-cta" href="https://www.honeyfund.com/site/farbeentommy" target="_blank" rel="noopener">view registry</a>
+    </section>
 
     <!-- GSAP Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -354,9 +725,8 @@
             }
         });
 
-        // --- 3. TRANSITION ANIMATION (Commented out - only showing save the date) ---
-        /*
-        gsap.registerPlugin(ScrollTrigger);
+        // --- 3. GSAP CIRCLE-WIPE TRANSITION ---
+        gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
         gsap.set(".espresso-flood", { scale: 0, xPercent: -50, yPercent: -50 });
 
@@ -364,31 +734,40 @@
             scrollTrigger: {
                 trigger: ".coffee-section",
                 start: "top top",
-                end: "+=200%",
+                end: "+=180%",
                 scrub: 1,
                 pin: true,
             }
         });
 
-        tl.to(".espresso-flood", {
-            opacity: 1,
-            scale: 250,
-            duration: 2,
-            ease: "power3.inOut"
-        });
-        */
+        // 1. Hold on the text, then fade it out
+        tl.to(".machine-container", {
+            opacity: 0,
+            duration: 0.8,
+            ease: "power1.in"
+        }, 0.6)
+            // 2. Expanding circle wipes the screen — full-screen takeover
+            .to(".espresso-flood", {
+                opacity: 1,
+                scale: 250,
+                duration: 2,
+                ease: "power3.inOut"
+            }, 0.8);
 
 
-        // --- 4. AUTO-SCROLL HELPER (Simplified - stops at save the date) ---
+        // --- 4. AUTO-SCROLL HELPER FOR THE INTRO ---
+        // Gently walks date -> location -> rsvp, then STOPS so the guest can
+        // read the RSVP and choose to scroll on via the bounce cue. Once they
+        // enter the lock-in transition, it lands them on Events.
         const pauseThreshold = 2000;
 
         const autoScrollSections = [
             { trigger: "#section-date", target: "#section-location", duration: 1, offsetY: 0.3 },
-            { trigger: "#section-location", target: "#section-rsvp", duration: 1, offsetY: 0.3 }
-            // Removed scroll to coffee-section - stops at save the date
+            { trigger: "#section-location", target: "#section-rsvp", duration: 1, offsetY: 0.3 },
+            { trigger: ".coffee-section", target: "#events-section", duration: 2, offsetY: 0 }
         ];
 
-        autoScrollSections.forEach((section, index) => {
+        autoScrollSections.forEach((section) => {
             let hasAutoScrolled = false;
             let pauseTimer = null;
 
@@ -407,24 +786,14 @@
                     if (hasAutoScrolled) return;
                     hasAutoScrolled = true;
 
-                    if (section.target === "coffee-end") {
-                        const coffeeSection = document.querySelector('.coffee-section');
-                        const coffeeTop = coffeeSection.getBoundingClientRect().top + window.scrollY;
-                        gsap.to(window, {
-                            scrollTo: coffeeTop + (window.innerHeight * 6.5),
-                            duration: section.duration,
-                            ease: "power1.inOut"
-                        });
-                    } else {
-                        const targetEl = document.querySelector(section.target);
-                        const targetHeight = targetEl ? targetEl.offsetHeight : 0;
-                        const centerOffset = (window.innerHeight - targetHeight) / 2;
-                        gsap.to(window, {
-                            scrollTo: { y: section.target, offsetY: centerOffset },
-                            duration: section.duration,
-                            ease: "power1.inOut"
-                        });
-                    }
+                    const targetEl = document.querySelector(section.target);
+                    const targetHeight = targetEl ? targetEl.offsetHeight : 0;
+                    const centerOffset = (window.innerHeight - targetHeight) / 2;
+                    gsap.to(window, {
+                        scrollTo: { y: section.target, offsetY: centerOffset },
+                        duration: section.duration,
+                        ease: "power1.inOut"
+                    });
                 }, pauseThreshold);
             }
 
@@ -440,6 +809,37 @@
                 }
             });
         });
+
+        // --- 5. "Scroll for more info" cue jumps into the lock-in transition ---
+        document.getElementById('scroll-cue').addEventListener('click', () => {
+            gsap.to(window, {
+                scrollTo: ".coffee-section",
+                duration: 1,
+                ease: "power2.inOut"
+            });
+        });
+
+        // --- 6. Transparent nav: reveal once Events comes into view ---
+        const siteNav = document.getElementById('site-nav');
+        ScrollTrigger.create({
+            trigger: '#events-section',
+            start: 'top 90%',
+            onEnter:     () => siteNav.classList.add('visible'),
+            onLeaveBack: () => siteNav.classList.remove('visible')
+        });
+
+        document.querySelectorAll('.site-nav a').forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                const href = a.getAttribute('href');
+                gsap.to(window, {
+                    scrollTo: (!href || href === '#') ? 0 : href,
+                    duration: 0.9,
+                    ease: 'power2.inOut'
+                });
+            });
+        });
+
     </script>
 
 </body>
