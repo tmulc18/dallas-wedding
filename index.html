@@ -298,6 +298,12 @@
             max-width: 720px;
         }
 
+        /* Last event's margin would make the gap to the next
+           section uneven — keep section spacing consistent */
+        .event-block:last-child {
+            margin-bottom: 0;
+        }
+
         .event-title {
             font-family: 'Cedarville Cursive', cursive;
             font-size: 3.2vw;
