@@ -424,6 +424,66 @@
             color: var(--bg-color);
         }
 
+        /* Additional nearby hotels */
+        .hotels-more {
+            margin: 7vh auto 0 auto;
+            max-width: 32em;
+        }
+
+        .hotels-more-label {
+            font-family: 'Cedarville Cursive', cursive;
+            font-size: 2vw;
+            color: var(--sketch-color);
+            opacity: 0.8;
+            margin: 0 0 3vh 0;
+        }
+
+        .hotels-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            text-align: left;
+        }
+
+        .hotels-list li {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+            padding-bottom: 1.25rem;
+        }
+
+        .hotels-list li:last-child {
+            border-bottom: none;
+        }
+
+        .hotels-list a {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 1.15vw;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: opacity 0.15s ease;
+        }
+
+        .hotels-list a:hover {
+            opacity: 0.6;
+        }
+
+        .hotels-list .hotel-note {
+            display: block;
+            margin-top: 0.35rem;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 1vw;
+            font-weight: 600;
+            text-transform: none;
+            letter-spacing: normal;
+            color: var(--sketch-color);
+            opacity: 0.75;
+        }
+
         /* Things to Do */
         .things-sub {
             font-family: 'Cedarville Cursive', cursive;
@@ -528,6 +588,18 @@
                 margin-bottom: 4vh;
                 white-space: normal;
                 line-height: 1.05;
+            }
+
+            .hotels-more-label {
+                font-size: 5.5vw;
+            }
+
+            .hotels-list a {
+                font-size: 3.6vw;
+            }
+
+            .hotels-list .hotel-note {
+                font-size: 3vw;
             }
 
             .event-title {
@@ -653,6 +725,28 @@
         <h2 class="info-header">STAY</h2>
         <p class="info-text">We've reserved a block of rooms for our guests at a special group rate. Book early &mdash; the block is limited.</p>
         <a class="info-cta" href="https://book.passkey.com/event/51272246/owner/8154/landing" target="_blank" rel="noopener">book a room</a>
+
+        <div class="hotels-more">
+            <p class="hotels-more-label">prefer somewhere else? a few favorites, all within a 15-minute ride of the venue</p>
+            <ul class="hotels-list">
+                <li>
+                    <a href="https://www.google.com/search?q=H%C3%B4tel+Swexan+Dallas" target="_blank" rel="noopener">Hôtel Swexan</a>
+                    <span class="hotel-note">Harwood District &mdash; Uptown</span>
+                </li>
+                <li>
+                    <a href="https://www.google.com/search?q=Thompson+Dallas+hotel" target="_blank" rel="noopener">Thompson Dallas</a>
+                    <span class="hotel-note">Downtown, inside The National</span>
+                </li>
+                <li>
+                    <a href="https://www.google.com/search?q=Canopy+by+Hilton+Dallas+Uptown" target="_blank" rel="noopener">Canopy by Hilton Dallas Uptown</a>
+                    <span class="hotel-note">Uptown</span>
+                </li>
+                <li>
+                    <a href="https://www.google.com/search?q=Hilton+Garden+Inn+Downtown+Dallas" target="_blank" rel="noopener">Hilton Garden Inn Downtown Dallas</a>
+                    <span class="hotel-note">Downtown</span>
+                </li>
+            </ul>
+        </div>
     </section>
 
     <!-- ==========================================
