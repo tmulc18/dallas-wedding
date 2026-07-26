@@ -228,11 +228,13 @@
         }
 
         /* --- COFFEE RAVE (LOCK-IN) TRANSITION --- */
+        /* Sits above .espresso-flood (20) so the photo can ride on top of the
+           brown once it floods, but under the info sections (50) and nav (100) */
         .coffee-section {
             position: relative;
             height: 100vh;
             width: 100vw;
-            z-index: 3;
+            z-index: 30;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -698,7 +700,7 @@
     <section class="coffee-section">
         <div class="machine-container">
             <!-- <h1 class="fg-text lock-text">LOCK IN TO PARTY</h1> -->
-            <img class="transition-photo" src="/portrait-1242.jpg" alt="Farbeen and Tommy" width="1067" height="1600">
+            <img class="transition-photo" src="/couple-portrait.jpg" alt="Farbeen and Tommy" width="1067" height="1600">
         </div>
     </section>
 
@@ -841,6 +843,7 @@
         gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
         gsap.set(".espresso-flood", { scale: 0, xPercent: -50, yPercent: -50 });
+        gsap.set(".machine-container", { opacity: 0 });
 
         const tl = gsap.timeline({
             scrollTrigger: {
@@ -852,19 +855,27 @@
             }
         });
 
-        // 1. Hold on the text, then fade it out
-        tl.to(".machine-container", {
-            opacity: 0,
-            duration: 0.8,
-            ease: "power1.in"
-        }, 0.6)
-            // 2. Expanding circle wipes the screen — full-screen takeover
+        // 1. The circle answers the scroll immediately — opacity snaps in so the
+        //    dot is there within the first few pixels, then scale carries it. A
+        //    slow-in ease on both reads as a dead screen and guests stall.
+        tl.to(".espresso-flood", {
+            opacity: 1,
+            duration: 0.2,
+            ease: "none"
+        }, 0)
             .to(".espresso-flood", {
-                opacity: 1,
                 scale: 250,
-                duration: 2,
-                ease: "power3.inOut"
-            }, 0.8);
+                duration: 1.8,
+                ease: "power2.inOut"
+            }, 0)
+            // 2. Once the brown has taken the screen, the photo fades up on it
+            .to(".machine-container", {
+                opacity: 1,
+                duration: 0.7,
+                ease: "power1.out"
+            }, 1.2)
+            // 3. Hold on the photo before the pin releases into Events
+            .to({}, { duration: 0.8 });
 
 
         // --- 4. AUTO-SCROLL HELPER FOR THE INTRO ---
