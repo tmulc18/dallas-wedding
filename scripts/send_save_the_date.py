@@ -17,7 +17,7 @@ MESSAGE = (
     "celebrate the wedding of their daughter, Farbeen Safa, and Tommy Mulc. "
     "Kindly save the date for November 21st, 2026 in Dallas, TX. Formal "
     "invitation and RSVPs to follow. Please visit the link below for more "
-    "details.\n\nhttps://nov21.party"
+    "details.\n\nhttps://farbeentommy.party"
 )
 
 SCRIPT_DIR = Path(__file__).resolve().parent

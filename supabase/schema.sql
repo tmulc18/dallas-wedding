@@ -1,4 +1,4 @@
--- Wedding RSVP schema for nov21.party
+-- Wedding RSVP schema for farbeentommy.party
 -- Run once via the Supabase SQL editor. Safe to re-run: tables use IF NOT EXISTS,
 -- functions use CREATE OR REPLACE.
 
