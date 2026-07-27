@@ -243,7 +243,8 @@
         }
 
         .machine-container {
-            position: relative;
+            position: absolute;
+            inset: 0;
             z-index: 10;
             display: flex;
             flex-direction: column;
@@ -294,15 +295,17 @@
             white-space: nowrap;
         }
 
-        /* Portrait photo that holds in the transition zone before the wipe */
+        /* Portrait photo revealed on the espresso wipe, full-bleed at every size.
+           A 2:3 portrait can't fill a landscape viewport and stay whole, so it
+           crops rather than letterboxes; the 30% Y bias keeps their faces in
+           frame on wide screens, where filling the width overflows the photo
+           far past the top and bottom of the viewport. */
         .transition-photo {
             display: block;
-            height: 62vh;
-            width: auto;
-            max-width: 88vw;
-            object-fit: contain;
-            border-radius: 4px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.22);
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 30%;
         }
 
         /* Events */
