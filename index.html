@@ -953,6 +953,31 @@
             });
         });
 
+        // --- 7. Land #hash arrivals from other pages in the right place ---
+        // The browser jumps to the anchor before ScrollTrigger measures, and
+        // pinning .coffee-section then inserts a spacer that pushes every
+        // section below it down — so the native landing is short of the mark.
+        // Re-resolve the target once the layout has settled.
+        const hash = window.location.hash;
+        if (hash && hash.length > 1) {
+            window.addEventListener('load', () => {
+                let target = null;
+                try {
+                    target = document.querySelector(hash);
+                } catch (err) {
+                    return; // not a usable selector
+                }
+                if (!target) return;
+
+                ScrollTrigger.refresh();
+                gsap.set(window, { scrollTo: { y: hash, autoKill: false } });
+                // Anything linkable sits at or below Events, so the nav belongs
+                // on screen — the reveal trigger can't fire for a scroll that
+                // never crossed it.
+                siteNav.classList.add('visible');
+            });
+        }
+
     </script>
 
 </body>

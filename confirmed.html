@@ -138,6 +138,38 @@
             margin: 1.5rem 0 0;
         }
 
+        .details-section {
+            border-top: 1px solid var(--outline-color);
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+        }
+
+        .details-row {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .details-btn {
+            flex: 1 1 140px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            text-align: center;
+            text-decoration: none;
+            padding: 0.85rem 1rem;
+            color: var(--text-dark);
+            border: 1.5px solid var(--outline-color);
+            border-radius: 4px;
+            transition: border-color 0.15s, background-color 0.15s;
+        }
+
+        .details-btn:hover {
+            border-color: var(--text-dark);
+            background-color: rgba(155, 17, 30, 0.06);
+        }
+
         .edit-link {
             margin-top: 3.5rem;
             text-align: center;
@@ -179,6 +211,15 @@
                 <strong>Astoria Event Venue</strong><br>3216 Royalty Row, Irving, TX 75062
             </a>
             <p class="more-details">more details soon...</p>
+        </section>
+
+        <section class="details-section">
+            <span class="cal-label">All the details</span>
+            <div class="details-row">
+                <a class="details-btn" href="/#events-section">Events</a>
+                <a class="details-btn" href="/#hotel-section">Stay</a>
+                <a class="details-btn" href="/#registry-section">Registry</a>
+            </div>
         </section>
 
         <p class="edit-link"><a href="/rsvp/">Made a mistake? Update your RSVP.</a></p>
