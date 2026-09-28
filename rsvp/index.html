@@ -467,15 +467,18 @@
                 const name = row.querySelector('input[type="text"]').value.trim();
                 const checked = row.querySelector('input[type="radio"]:checked');
 
+                // Guests without a choice are skipped, so one family member can
+                // RSVP for just part of the party; the rest can answer later.
+                if (!checked) continue;
                 if (!name) {
                     setMessage(respMsg, 'Please enter a name for each guest.', 'error');
                     return;
                 }
-                if (!checked) {
-                    setMessage(respMsg, `Please choose attending or not for ${name || 'each guest'}.`, 'error');
-                    return;
-                }
                 responses.push({ name, attending: checked.value === 'yes' });
+            }
+            if (responses.length === 0) {
+                setMessage(respMsg, 'Please choose attending or not for at least one guest.', 'error');
+                return;
             }
 
             submitBtn.disabled = true;
