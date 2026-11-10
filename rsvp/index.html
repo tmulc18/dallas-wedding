@@ -193,6 +193,22 @@
             font-weight: 400;
         }
 
+        .guest-row.readonly {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+        }
+        .guest-row.readonly .guest-name { margin: 0; }
+        .rsvp-status {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+        .rsvp-status.yes { color: var(--text-dark); font-weight: 600; }
+
         .yes-no {
             display: flex;
             gap: 0.5rem;
@@ -253,7 +269,7 @@
 
                 <!-- ===== Lookup view ===== -->
                 <section id="lookup-view">
-                    <p class="lookup-intro">You're able to respond for all attendees in your party at once&mdash;you, your guest(s), or your family.</p>
+                    <p class="lookup-intro" id="lookup-intro">You're able to respond for all attendees in your party at once&mdash;you, your guest(s), or your family.</p>
                     <form id="lookup-form" novalidate>
                         <label for="phone">Your phone number</label>
                         <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(214) 555-0123" required>
@@ -311,6 +327,15 @@
         let currentCap = 1;
         let knownGuests = [];
         let existingResponses = [];  // prior RSVP rows: [{ name, attending: bool }]
+        let rsvpsOpen = true;        // mirrors settings.rsvps_open; submit_rsvp enforces it server-side
+
+        // Fail open: if the check errors, show the normal form and let
+        // submit_rsvp (the real gate) decide.
+        async function fetchRsvpsOpen() {
+            const { data, error } = await sb.rpc('rsvps_open');
+            if (error) { console.error(error); return true; }
+            return data !== false;
+        }
 
         // ===== DOM =====
         const lookupView = document.getElementById('lookup-view');
@@ -347,6 +372,19 @@
             return row;
         }
 
+        function readOnlyRowTemplate({ name, attending }) {
+            const row = document.createElement('div');
+            row.className = 'guest-row readonly';
+            const [label, cls] = attending === true ? ['Attending', 'yes']
+                : attending === false ? ["Can't make it", 'no']
+                : ['No response', 'none'];
+            row.innerHTML = `
+                <div class="guest-name">${escapeHtml(name)}</div>
+                <div class="rsvp-status ${cls}">${label}</div>
+            `;
+            return row;
+        }
+
         function escapeHtml(s) {
             return String(s).replace(/[&<>"']/g, c => ({
                 '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -376,12 +414,26 @@
                 }
             });
 
+            lookupView.classList.add('hidden');
+            responseView.classList.remove('hidden');
+
+            if (!rsvpsOpen) {
+                // Closed: show what we have, no editing or adding guests.
+                rows.filter(r => r.name).forEach(r => rowsEl.appendChild(readOnlyRowTemplate(r)));
+                addRowBtn.classList.add('hidden');
+                submitBtn.classList.add('hidden');
+                setMessage(respMsg, existingResponses.length > 0
+                    ? "RSVPs are now closed. Here's what we have for your party."
+                    : "RSVPs are now closed and we don't have a response for your party. Please reach out to Farbeen or Tommy directly.",
+                    '');
+                return;
+            }
+
+            submitBtn.classList.remove('hidden');
             if (rows.length === 0) rows.push({ name: '', attending: undefined });
             rows.forEach(r => rowsEl.appendChild(rowTemplate(r)));
 
             updateAddButton();
-            lookupView.classList.add('hidden');
-            responseView.classList.remove('hidden');
             if (existingResponses.length > 0) {
                 setMessage(respMsg, 'We found your previous RSVP below. Update it and resubmit anytime.', 'success');
             } else {
@@ -425,11 +477,13 @@
             lookupBtn.disabled = true;
             setMessage(lookupMsg, 'Looking…', '');
 
-            const [guestRes, rsvpRes] = await Promise.all([
+            const [guestRes, rsvpRes, open] = await Promise.all([
                 sb.rpc('lookup_guest', { p_phone: phone }),
                 sb.rpc('lookup_rsvp', { p_phone: phone }),
+                fetchRsvpsOpen(),
             ]);
             lookupBtn.disabled = false;
+            rsvpsOpen = open;
 
             const { data, error } = guestRes;
             if (error) {
@@ -462,6 +516,7 @@
         // ===== Submit RSVP =====
         document.getElementById('response-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+            if (!rsvpsOpen) return;
             const responses = [];
             for (const row of rowsEl.children) {
                 const name = row.querySelector('input[type="text"]').value.trim();
@@ -491,6 +546,11 @@
 
             if (error) {
                 submitBtn.disabled = false;
+                if (/rsvps are closed/i.test(error.message || '')) {
+                    setMessage(respMsg, 'Sorry, RSVPs are now closed. Please reach out to Farbeen or Tommy directly.', 'error');
+                    console.error(error);
+                    return;
+                }
                 setMessage(respMsg, "Couldn't save your RSVP. Please try again.", 'error');
                 console.error(error);
                 return;
@@ -498,6 +558,14 @@
 
             const anyYes = responses.some(r => r.attending);
             window.location.href = `/confirmed.html?attending=${anyYes ? 'yes' : 'no'}`;
+        });
+
+        // Swap the intro copy up front so guests know before they look up.
+        fetchRsvpsOpen().then(open => {
+            if (!open) {
+                document.getElementById('lookup-intro').textContent =
+                    "RSVPs are now closed. Enter your phone number to see your party's response.";
+            }
         });
     </script>
 </body>

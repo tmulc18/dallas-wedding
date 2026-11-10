@@ -29,10 +29,36 @@ create table if not exists rsvps (
   unique (phone, guest_name)
 );
 
+-- Single-row site settings. Flip rsvps_open to false to close RSVPs: guests
+-- can still look up their party and see their responses, but submit_rsvp
+-- refuses any changes.
+--   update settings set rsvps_open = false;   -- close
+--   update settings set rsvps_open = true;    -- reopen
+create table if not exists settings (
+  id          int     primary key default 1 check (id = 1),
+  rsvps_open  boolean not null default true
+);
+insert into settings (id) values (1) on conflict (id) do nothing;
+
 -- RLS: deny everything by default. Only the security-definer RPCs touch data.
 alter table guest_list    enable row level security;
 alter table phone_aliases enable row level security;
 alter table rsvps         enable row level security;
+alter table settings      enable row level security;
+
+-- RPC: are RSVPs open? ------------------------------------------------
+create or replace function rsvps_open()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select coalesce((select s.rsvps_open from settings s where s.id = 1), true);
+$$;
+
+revoke all on function rsvps_open() from public;
+grant  execute on function rsvps_open() to anon, authenticated;
 
 -- Resolve a possibly-alias phone to the primary phone in guest_list.
 -- Returns NULL when the phone is unknown.
@@ -100,6 +126,10 @@ declare
   r         jsonb;
   v_name    text;
 begin
+  if not rsvps_open() then
+    raise exception 'rsvps are closed';
+  end if;
+
   v_phone := resolve_phone(p_phone);
 
   if v_phone is null then
