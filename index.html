@@ -511,7 +511,7 @@
 
         .things-title {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-size: 3vw;
+            font-size: 2.2vw;
             font-weight: 800;
             color: var(--text-dark);
             text-transform: uppercase;
@@ -523,11 +523,11 @@
             list-style: none;
             padding: 0;
             margin: 0;
-            font-size: 1.4vw;
+            font-size: 1.15vw;
             font-weight: bold;
             line-height: 1.5;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             display: flex;
             flex-direction: column;
             gap: 0.75rem;
@@ -557,6 +557,18 @@
         .things-list a:hover {
             color: var(--text-dark);
         }
+
+        /* Lowercase aside after a name, e.g. "(try the brunch)" */
+        .things-note {
+            font-size: 0.87em;
+            font-weight: 600;
+            text-transform: none;
+            letter-spacing: normal;
+            opacity: 0.6;
+            margin-left: 0.4em;
+        }
+        .things-note::before { content: "("; }
+        .things-note::after  { content: ")"; }
 
         /* Mobile Adjustments */
         @media (max-width: 768px) {
@@ -640,11 +652,11 @@
             }
 
             .things-title {
-                font-size: 6vw;
+                font-size: 5vw;
             }
 
             .things-list {
-                font-size: 3.5vw;
+                font-size: 3.4vw;
                 letter-spacing: 1px;
             }
 
@@ -670,7 +682,7 @@
         <div class="site-nav-links">
             <a href="#events-section">Event</a>
             <a href="#hotel-section">Stay</a>
-            <!-- <a href="#things-section">Dallas</a> -->
+            <a href="#things-section">Dallas</a>
             <a href="#registry-section">Registry</a>
         </div>
     </nav>
@@ -752,43 +764,58 @@
     </section>
 
     <!-- ==========================================
-         THINGS TO DO SECTION (hidden for now — re-enable
-         by uncommenting this section + its nav link above)
+         THINGS TO DO SECTION
          ========================================== -->
-    <!--
     <section id="things-section" class="info-section">
-        <h2 class="info-header">DALLAS'S GREATEST HITS</h2>
-        <p class="things-sub">our favs for those wondering &mdash; coming soon</p>
+        <h2 class="info-header">SEE DALLAS</h2>
+        <p class="things-sub">our favs for those wondering</p>
 
         <div class="things-block">
             <h3 class="things-title">ACTIVITIES</h3>
             <ul class="things-list">
-                <li class="soon">coming soon &#10022;</li>
+                <li><a href="https://www.google.com/search?q=The+Sixth+Floor+Museum+at+Dealey+Plaza+Dallas" target="_blank" rel="noopener">The Sixth Floor Museum at Dealey Plaza</a></li>
+                <li><a href="https://www.google.com/search?q=Nasher+Sculpture+Center+Dallas" target="_blank" rel="noopener">Nasher Sculpture Center</a></li>
+                <li>Go to <a href="https://www.google.com/search?q=Dallas+Cowboys+schedule" target="_blank" rel="noopener">a Cowboys game</a></li>
+                <li>Shopping at <a href="https://www.google.com/search?q=Highland+Park+Village+Dallas" target="_blank" rel="noopener">Highland Park Village</a> or <a href="https://www.google.com/search?q=NorthPark+Center+Dallas" target="_blank" rel="noopener">NorthPark Center</a></li>
+                <li>Afternoon tea at <a href="https://www.google.com/search?q=The+French+Room+Adolphus+Dallas+afternoon+tea" target="_blank" rel="noopener">The French Room</a></li>
+                <li>Visit Fort Worth for <a href="https://www.google.com/search?q=Fort+Worth+Stockyards" target="_blank" rel="noopener">the Stockyards</a></li>
+                <li>Go for a run or walk on <a href="https://www.google.com/search?q=Katy+Trail+Dallas" target="_blank" rel="noopener">the Katy Trail</a></li>
+                <li>Explore <a href="https://www.google.com/search?q=Bishop+Arts+District+Dallas" target="_blank" rel="noopener">Bishop Arts District</a></li>
             </ul>
         </div>
 
         <div class="things-block">
-            <h3 class="things-title">EATS</h3>
+            <h3 class="things-title">RESTAURANTS</h3>
             <ul class="things-list">
-                <li class="soon">coming soon &#10022;</li>
-            </ul>
-        </div>
-
-        <div class="things-block">
-            <h3 class="things-title">COFFEE &amp; MATCHA</h3>
-            <ul class="things-list">
-                <li class="soon">coming soon &#10022;</li>
+                <li><a href="https://www.google.com/search?q=Las+Palmas+Dallas" target="_blank" rel="noopener">Las Palmas</a> <span class="things-note">Tex-Mex</span></li>
+                <li><a href="https://www.google.com/search?q=El+Carlos+Elegante+Dallas" target="_blank" rel="noopener">El Carlos Elegante</a> <span class="things-note">Tex-Mex</span></li>
+                <li><a href="https://www.google.com/search?q=Encina+Dallas" target="_blank" rel="noopener">Encina</a> <span class="things-note">try the brunch</span></li>
+                <li><a href="https://www.google.com/search?q=Hudson+House+Dallas" target="_blank" rel="noopener">Hudson House</a> <span class="things-note">go-to for lunch</span></li>
+                <li><a href="https://www.google.com/search?q=Mister+Charles+Dallas" target="_blank" rel="noopener">Mister Charles</a> <span class="things-note">peak Dallas</span></li>
+                <li><a href="https://www.google.com/search?q=Georgie+Dallas" target="_blank" rel="noopener">Georgie</a> <span class="things-note">French</span></li>
+                <li><a href="https://www.google.com/search?q=Uchi+Dallas" target="_blank" rel="noopener">Uchi</a> <span class="things-note">always fun</span></li>
+                <li><a href="https://www.google.com/search?q=Lucia+Dallas" target="_blank" rel="noopener">Lucia</a> <span class="things-note">Italian</span></li>
+                <li><a href="https://www.google.com/search?q=Partenope+Ristorante+Dallas" target="_blank" rel="noopener">Partenope Restaurante</a> <span class="things-note">pizza</span></li>
+                <li><a href="https://www.google.com/search?q=Sister+Restaurant+Dallas" target="_blank" rel="noopener">Sister Restaurant</a> <span class="things-note">Farbeen&rsquo;s favorite</span></li>
+                <li><a href="https://www.google.com/search?q=Tei-An+Dallas" target="_blank" rel="noopener">Tei-An</a> <span class="things-note">Japanese</span></li>
+                <li><a href="https://www.google.com/search?q=Terry+Black%27s+Barbecue+Dallas" target="_blank" rel="noopener">Terry Black&rsquo;s Barbecue</a> <span class="things-note">BBQ</span></li>
+                <li><a href="https://www.google.com/search?q=Hurtado+Barbecue+Dallas" target="_blank" rel="noopener">Hurtado Barbecue</a> <span class="things-note">BBQ Tex-Mex fusion</span></li>
+                <li><a href="https://www.google.com/search?q=Billy+Can+Can+Dallas" target="_blank" rel="noopener">Billy Can Can</a> <span class="things-note">a taste of Texas</span></li>
+                <li><a href="https://www.google.com/search?q=JD%27s+Chippery+Dallas" target="_blank" rel="noopener">JD&rsquo;s Chippery</a> <span class="things-note">the best cookies</span></li>
             </ul>
         </div>
 
         <div class="things-block">
             <h3 class="things-title">BARS</h3>
             <ul class="things-list">
-                <li class="soon">coming soon &#10022;</li>
+                <li><a href="https://www.google.com/search?q=Bowen+House+Dallas" target="_blank" rel="noopener">Bowen House</a></li>
+                <li><a href="https://www.google.com/search?q=Parliament+Dallas" target="_blank" rel="noopener">Parliament</a></li>
+                <li><a href="https://www.google.com/search?q=Midnight+Rambler+Dallas" target="_blank" rel="noopener">Midnight Rambler</a></li>
+                <li><a href="https://www.google.com/search?q=Clifton+Club+Bar+%26+Lounge+Dallas" target="_blank" rel="noopener">Clifton Club Bar &amp; Lounge</a></li>
+                <li><a href="https://www.google.com/search?q=Apothecary+Dallas" target="_blank" rel="noopener">Apothecary</a></li>
             </ul>
         </div>
     </section>
-    -->
 
     <!-- ==========================================
          REGISTRY SECTION
